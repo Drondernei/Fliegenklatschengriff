@@ -6,10 +6,11 @@ int blueLED = 10;
 int redLED = 9;
 //Buzzer as sound module
 int passiveBuzzer = 8;
-//Joystick as control unit
-int xAxis = A0;
-int yAxis = A1;
-int zButton = 0;
+//Buttons to control functionality
+int buttonGreen = 2;
+int buttonBlue = 3;
+int buttonRed = 4;
+int buttonYellow = 5;
 
 int ledArray[] = {blueLED, redLED};
 
@@ -21,18 +22,17 @@ void setup() {
   pinMode(blueLED, OUTPUT);
   pinMode(redLED, OUTPUT);
   pinMode(passiveBuzzer, OUTPUT);
-  pinMode(xAxis, INPUT);
-  pinMode(yAxis, INPUT);
-  pinMode(zButton, INPUT);
+  pinMode(buttonGreen, INPUT);
+  pinMode(buttonBlue, INPUT);
+  pinMode(buttonRed, INPUT);
+  pinMode(buttonYellow, INPUT);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 
-  //The Joysticks Y-Axis means X-Axis on the real "Hardware" due to installation method; priority on this event
-
-  //yAxis controls sirene incl. flashing lights
-  if (analogRead(yAxis) < 50 || analogRead(yAxis) > 950)
+  //green button controls sirene incl. flashing lights
+  if (digitalRead(buttonGreen) == HIGH)
   {
     for (int i = 0; i < 4; i++) {
       digitalWrite(ledArray[i % 2], HIGH);
@@ -42,21 +42,21 @@ void loop() {
       delay(500);
     }
     
-  //xAxis controls blue and red LED, depends on direction
-  } else if (analogRead(xAxis) < 50) {
+  //blue button controls blue LED
+  } else if (digitalRead(buttonBlue) == HIGH) {
     digitalWrite(blueLED, HIGH);
     delay(350);
     digitalWrite(blueLED, LOW);
     delay(350);
-  } else if (analogRead(xAxis) > 950) {
+  //red button controls red LED
+  } else if (digitalRead(buttonRed) == HIGH) {
     digitalWrite(redLED, HIGH);
     delay(350);
     digitalWrite(redLED, LOW);
     delay(350);
     
-  //Pressing the Joystick (zButton) leads to "meep meep"
-  }else if (digitalRead(zButton) == LOW) {
-    Serial.println(digitalRead(zButton));
+  //Pressing yellow button leads to "meep meep"
+  }else if (digitalRead(buttonYellow) == HIGH) {
     tone(passiveBuzzer, NOTE_E5, toneDuration);
     delay(500);
     tone(passiveBuzzer, 0, toneDuration);
